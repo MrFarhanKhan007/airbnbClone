@@ -18,6 +18,8 @@ const Layout = () => {
 
             <Tabs.Screen name="index" options={
                 {
+                    headerTitleAlign: "center",
+
                     tabBarLabel: "Explore",
                     tabBarIcon: ({ color, size }) =>
                         <Ionicons name="search"

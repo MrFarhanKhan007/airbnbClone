@@ -12,6 +12,9 @@ const Explore = () => {
       <Link href={"/(modals)/booking"}>
         Bookings
       </Link>
+      <Link href={"/listing/133"}>
+        Listing details
+      </Link>
     </View>
   )
 }

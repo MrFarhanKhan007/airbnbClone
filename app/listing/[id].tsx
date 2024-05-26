@@ -4,10 +4,10 @@ import { useLocalSearchParams } from 'expo-router'
 
 const Page = () => {
     const { id } = useLocalSearchParams<{ id: string }>()
-    
+
     return (
         <View>
-            <Text>Page</Text>
+            <Text>{id}</Text>
         </View>
     )
 }
