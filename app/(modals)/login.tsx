@@ -4,9 +4,57 @@ import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser'
 import { defaultStyles } from '@/constants/Styles'
 import Colors from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
+import { useOAuth } from '@clerk/clerk-expo'
+import { useRouter } from 'expo-router'
+
+enum Strategy {
+  Google = "oauth_google",
+  Apple = "oauth_apple",
+  Facebook = "oauth_facebook"
+}
 
 const Login = () => {
   useWarmUpBrowser()
+
+  const router = useRouter()
+
+  const { startOAuthFlow: appleAuth } = useOAuth(
+    {
+      strategy: "oauth_apple"
+    }
+  )
+
+  const { startOAuthFlow: googleAuth } = useOAuth(
+    {
+      strategy: "oauth_google"
+    }
+  )
+
+  const { startOAuthFlow: facebookAuth } = useOAuth(
+    {
+      strategy: "oauth_facebook"
+    }
+  )
+
+  const onSelectauth = async (strategy: Strategy) => {
+    const selectedAuth = {
+      [Strategy.Apple]: appleAuth,
+      [Strategy.Google]: googleAuth,
+      [Strategy.Facebook]: facebookAuth,
+    }[strategy];
+
+    try {
+      const { createdSessionId, setActive } = await selectedAuth();
+      console.log(createdSessionId, setActive)
+
+      if (createdSessionId) {
+        setActive!({ session: createdSessionId })
+        router.back()
+      }
+    } catch (error) {
+      console.error("OAuth error: ", error)
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -64,7 +112,10 @@ const Login = () => {
 
         </TouchableOpacity>
 
-        <TouchableOpacity style={defaultStyles.btnOutline}>
+        <TouchableOpacity
+          style={defaultStyles.btnOutline}
+          onPress={() => onSelectauth(Strategy.Apple)}
+        >
 
           <Ionicons name="logo-apple"
             size={24}
@@ -77,9 +128,12 @@ const Login = () => {
 
         </TouchableOpacity>
 
-        <TouchableOpacity style={defaultStyles.btnOutline}>
+        <TouchableOpacity
+          style={defaultStyles.btnOutline}
+          onPress={() => onSelectauth(Strategy.Google)}
+        >
 
-          <Ionicons name= "logo-google"
+          <Ionicons name="logo-google"
             size={24}
             style={defaultStyles.btnIcon}>
           </Ionicons>
@@ -90,15 +144,17 @@ const Login = () => {
 
         </TouchableOpacity>
 
-        <TouchableOpacity style={defaultStyles.btnOutline}>
-
-          <Ionicons name= "logo-facebook"
+        <TouchableOpacity
+          style={defaultStyles.btnOutline}
+          onPress={() => onSelectauth(Strategy.Facebook)}
+        >
+          <Ionicons name="logo-facebook"
             size={24}
             style={defaultStyles.btnIcon}>
           </Ionicons>
 
           <Text style={defaultStyles.btnOutlineText}>
-            Continue with FaceBook
+            Continue with Facebook
           </Text>
 
         </TouchableOpacity>
