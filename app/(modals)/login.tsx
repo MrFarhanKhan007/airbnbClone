@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router'
 
 enum Strategy {
   Google = "oauth_google",
-  Apple = "oauth_apple",
+  Github = "oauth_github",
   Facebook = "oauth_facebook"
 }
 
@@ -18,9 +18,9 @@ const Login = () => {
 
   const router = useRouter()
 
-  const { startOAuthFlow: appleAuth } = useOAuth(
+  const { startOAuthFlow: githubAuth } = useOAuth(
     {
-      strategy: "oauth_apple"
+      strategy: "oauth_github"
     }
   )
 
@@ -38,7 +38,7 @@ const Login = () => {
 
   const onSelectauth = async (strategy: Strategy) => {
     const selectedAuth = {
-      [Strategy.Apple]: appleAuth,
+      [Strategy.Github]: githubAuth,
       [Strategy.Google]: googleAuth,
       [Strategy.Facebook]: facebookAuth,
     }[strategy];
@@ -114,16 +114,16 @@ const Login = () => {
 
         <TouchableOpacity
           style={defaultStyles.btnOutline}
-          onPress={() => onSelectauth(Strategy.Apple)}
+          onPress={() => onSelectauth(Strategy.Github)}
         >
 
-          <Ionicons name="logo-apple"
+          <Ionicons name="logo-github"
             size={24}
             style={defaultStyles.btnIcon}>
           </Ionicons>
 
           <Text style={defaultStyles.btnOutlineText}>
-            Continue with Apple
+            Continue with Github
           </Text>
 
         </TouchableOpacity>

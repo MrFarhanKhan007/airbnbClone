@@ -9,10 +9,11 @@ const profile = () => {
     <View>
       <Button
         title='Log out'
-        onPress={() => signOut()
+        onPress={
+          () =>
+            signOut()
         }
       />
-
       {
         !isSignedIn && (
           <Link href={"/(modals)/login"}>
