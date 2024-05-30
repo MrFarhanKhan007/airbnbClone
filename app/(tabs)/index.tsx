@@ -15,7 +15,7 @@ const Explore = () => {
           }
         }
       />
-      <Listings />
+      {/* <Listings /> */}
 
     </View>
   )
