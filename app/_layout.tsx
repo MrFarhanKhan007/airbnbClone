@@ -70,7 +70,7 @@ export default function RootLayout() {
 
   return (
     <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
-      <RootLayoutNav /> 
+      <RootLayoutNav />
     </ClerkProvider>
   )
 }
@@ -108,7 +108,8 @@ function RootLayoutNav() {
 
       <Stack.Screen name='listing/[id]' options={
         {
-          headerTitle: ""
+          headerTitle: "",
+          headerTransparent: true
         }
       }>
 
