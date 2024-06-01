@@ -1,6 +1,6 @@
-import { View, Text, Image, StyleSheet, Dimensions, useWindowDimensions, TouchableOpacity } from 'react-native'
-import React, { useEffect } from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { View, Text, Image, StyleSheet, Dimensions, useWindowDimensions, TouchableOpacity, Share } from 'react-native'
+import React, { useEffect, useLayoutEffect } from 'react'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
 import listingsData from "@/assets/data/csvjsonLatest.json"
 import { defaultStyles } from '@/constants/Styles'
 import Animated, { SlideInDown, interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated'
@@ -17,6 +17,83 @@ const Page = () => {
     const scrollRef = useAnimatedRef<Animated.ScrollView>()
 
     const scrollOffset = useScrollViewOffset(scrollRef)
+    const shareListing = async () => {
+        try {
+            await Share.share(
+                {
+                    title: listing.name,
+                    url: listing.listing_url,
+                    message: `Check out this latest listing - ${listing.listing_url}`
+                }
+            )
+        } catch (err) {
+            console.log(err)
+        }
+    };
+
+
+    const navigation = useNavigation();
+    useLayoutEffect(() => {
+        navigation.setOptions(
+            {
+                headerBackground: () => (
+                    <Animated.View
+                        style={[styles.header, headerAnimatedStyle]}
+                    >
+                    </Animated.View>
+                ),
+                headerRight: () => (
+                    <View style={styles.bar}>
+                        <TouchableOpacity
+                            onPress={shareListing}
+                            style={styles.roundButton}>
+                            <Ionicons
+                                name="share-outline"
+                                size={22}
+                                color={"#000000"}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => { }}
+                            style={styles.roundButton}>
+                            <Ionicons
+                                name="heart-outline"
+                                size={22}
+                                color={"#000000"}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                ),
+                headerLeft: () => (
+                    <TouchableOpacity
+                        onPress={navigation.goBack}
+                        style={styles.roundButton}>
+                        <Ionicons
+                            name="chevron-back"
+                            size={22}
+                            color={"#000000"}
+                        />
+                    </TouchableOpacity>
+                )
+            }
+
+        )
+
+    }, []
+    )
+
+    const headerAnimatedStyle = useAnimatedStyle(
+        () => {
+            return {
+                opacity: interpolate(
+                    scrollOffset.value,
+                    [0,IMG_HEIGHT/1.5],
+                    [0,1]
+                )
+            }
+
+        }
+    )
 
     const imageAnimatedStyle = useAnimatedStyle(
         () => {
@@ -204,6 +281,7 @@ const styles = StyleSheet.create(
             alignItems: 'center',
             justifyContent: 'center',
             color: Colors.primary,
+            elevation: 5
         },
         bar: {
             flexDirection: 'row',
