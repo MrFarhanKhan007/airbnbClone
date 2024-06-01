@@ -4,6 +4,7 @@ import { defaultStyles } from '@/constants/Styles';
 import { Link } from 'expo-router';
 import { AirbnbListing } from '@/assets/data/airbnblistingsinterface';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 
 interface Props {
   listings: any[],
@@ -28,7 +29,10 @@ const Listings = ({ listings: items, category }: Props) => {
   const renderRow: ListRenderItem<AirbnbListing> = ({ item }) => (
     <Link href={`/listing/${item.id}`} asChild>
       <TouchableOpacity>
-        <View style={styles.listing}>
+        <Animated.View 
+        entering={FadeInRight}
+        exiting={FadeOutLeft}
+        style={styles.listing}>
           <Image
             style={styles.image}
             source={
@@ -46,22 +50,29 @@ const Listings = ({ listings: items, category }: Props) => {
           >
             <Ionicons name="heart-outline" size={24} color="#000"></Ionicons>
           </TouchableOpacity>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <Text style={{ fontSize: 16, fontFamily: "mon-sb" }}>{item.name}</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", gap: 15 }}>
+            <Text style={{ fontSize: 16, fontFamily: "mon-sb", width: 250 }}>{item.name}</Text>
             <View style={{ flexDirection: "row", gap: 4 }}>
               <Ionicons name="star" size={16}></Ionicons>
-              <Text style={{ fontFamily: "mon-sb" }}>{item.review_scores_rating}</Text>
+              {item.review_scores_rating != null ? (
+                <Text style={{ fontFamily: "mon-sb" }}>{item.review_scores_rating}</Text>
+              ) : (
+                <Text style={{ fontFamily: "mon-sb" }}>N/A</Text>
+              )}
             </View>
           </View>
 
           <Text style={{ fontFamily: "mon" }}> {item.room_type}</Text>
           <View style={{ flexDirection: "row", gap: 4 }}>
-            <Text style={{ fontFamily: "mon-sb" }}> {item.price}</Text>
+            {!Number.isNaN(item.review_scores_rating) ? (
+              <Text style={{ fontFamily: "mon-sb" }}> {item.price}</Text>
+            ) : (
+              <Text style={{ fontFamily: "mon-sb" }}>N/A</Text>
+            )}
             <Text style={{ fontFamily: "mon" }}>/ night</Text>
-
           </View>
 
-        </View>
+        </Animated.View>
       </TouchableOpacity>
     </Link>
   )

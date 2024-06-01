@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { Link, Stack } from 'expo-router'
 import ExploreHeader from '@/components/exploreHeader'
 import Listings from '@/components/Listings'
-import listingsData from "@/assets/data/csvjson.json"
+import listingsData from "@/assets/data/csvjsonLatest.json"
 
 const Explore = () => {
   const [category, setcategory] = useState("Tiny Homes")
