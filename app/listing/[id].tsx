@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Dimensions, useWindowDimensions, TouchableOpacity, Share } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions, Pressable, Share } from 'react-native'
 import React, { useEffect, useLayoutEffect } from 'react'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import listingsData from "@/assets/data/csvjsonLatest.json"
@@ -44,7 +44,7 @@ const Page = () => {
                 ),
                 headerRight: () => (
                     <View style={styles.bar}>
-                        <TouchableOpacity
+                        <Pressable
                             onPress={shareListing}
                             style={styles.roundButton}>
                             <Ionicons
@@ -52,8 +52,8 @@ const Page = () => {
                                 size={22}
                                 color={"#000000"}
                             />
-                        </TouchableOpacity>
-                        <TouchableOpacity
+                        </Pressable>
+                        <Pressable
                             onPress={() => { }}
                             style={styles.roundButton}>
                             <Ionicons
@@ -61,11 +61,11 @@ const Page = () => {
                                 size={22}
                                 color={"#000000"}
                             />
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                 ),
                 headerLeft: () => (
-                    <TouchableOpacity
+                    <Pressable
                         onPress={navigation.goBack}
                         style={styles.roundButton}>
                         <Ionicons
@@ -73,7 +73,7 @@ const Page = () => {
                             size={22}
                             color={"#000000"}
                         />
-                    </TouchableOpacity>
+                    </Pressable>
                 )
             }
 
@@ -195,16 +195,16 @@ const Page = () => {
                         }
                     }
                 >
-                    <TouchableOpacity style={styles.footerText}>
+                    <Pressable style={styles.footerText}>
                         <Text style={styles.footerPrice}>{listing.price}</Text>
                         <Text style={{ fontFamily: "mon" }}>/night</Text>
-                    </TouchableOpacity>
+                    </Pressable>
 
-                    <TouchableOpacity style={[defaultStyles.btn, { paddingHorizontal: 20 }]}>
+                    <Pressable style={[defaultStyles.btn, { paddingHorizontal: 20 }]}>
                         <Text style={defaultStyles.btnText}>
                             Reserve
                         </Text>
-                    </TouchableOpacity>
+                    </Pressable>
 
                 </View>
             </Animated.View>
