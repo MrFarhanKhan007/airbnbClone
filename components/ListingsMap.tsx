@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text } from 'react-native'
-import React from "react"
+import React, { memo } from "react"
 import { Marker } from "react-native-maps"
 import { defaultStyles } from '@/constants/Styles'
 import { AirbnbListing } from '@/assets/data/airbnblistingsinterface'
@@ -17,39 +17,39 @@ const INITIAL_REGION = {
     longitudeDelta: 0.1
 }
 
-const ListingsMap = ({ listings }: Props) => {
+const ListingsMap = memo(({ listings }: Props) => {
 
     const router = useRouter()
     const onMarkerSelected = (item: AirbnbListing) => {
         router.push(`/listing/${item.id}`)
     }
 
-  // Overwrite the renderCluster function to customize the cluster markers
-  const renderCluster = (cluster: any) => {
-    const { id, geometry, onPress, properties } = cluster;
+    // Overwrite the renderCluster function to customize the cluster markers
+    const renderCluster = (cluster: any) => {
+        const { id, geometry, onPress, properties } = cluster;
 
-    const points = properties.point_count;
-    return (
-      <Marker
-        key={`cluster-${id}`}
-        coordinate={{
-          longitude: geometry.coordinates[0],
-          latitude: geometry.coordinates[1],
-        }}
-        onPress={onPress}>
-        <View style={styles.marker}>
-          <Text
-            style={{
-              color: '#000',
-              textAlign: 'center',
-              fontFamily: 'mon-sb',
-            }}>
-            {points}
-          </Text>
-        </View>
-      </Marker>
-    );
-  };
+        const points = properties.point_count;
+        return (
+            <Marker
+                key={`cluster-${id}`}
+                coordinate={{
+                    longitude: geometry.coordinates[0],
+                    latitude: geometry.coordinates[1],
+                }}
+                onPress={onPress}>
+                <View style={styles.marker}>
+                    <Text
+                        style={{
+                            color: '#000',
+                            textAlign: 'center',
+                            fontFamily: 'mon-sb',
+                        }}>
+                        {points}
+                    </Text>
+                </View>
+            </Marker>
+        );
+    }
 
     return (
         <View style={defaultStyles.container}>
@@ -91,7 +91,7 @@ const ListingsMap = ({ listings }: Props) => {
         </View>
     )
 }
-
+)
 
 const styles = StyleSheet.create({
     container: {

@@ -1,20 +1,30 @@
-import { View, Text, StyleSheet, FlatList, ListRenderItem, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, ListRenderItem, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { defaultStyles } from '@/constants/Styles';
 import { Link } from 'expo-router';
 import { AirbnbListing } from '@/assets/data/airbnblistingsinterface';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
+import { FlatList } from 'react-native-gesture-handler';
+import { BottomSheetFlatList, BottomSheetFlatListMethods } from '@gorhom/bottom-sheet';
 
 interface Props {
   listings: any[],
   category: string;
+  refresh: number
 }
 
-const Listings = ({ listings: items, category }: Props) => {
+const Listings = ({ listings: items, category, refresh }: Props) => {
 
   const [loading, setloading] = useState(false)
-  const listRef = useRef<FlatList>(null)
+  const listRef = useRef<BottomSheetFlatListMethods>(null)
+
+  useEffect(() => {
+    console.log("REFRESH_LISTINGS_")
+    if (refresh) {
+      listRef.current?.scrollToOffset({ offset: 0, animated: true })
+    }
+  }, [refresh])
 
   useEffect(
     () => {
@@ -29,10 +39,10 @@ const Listings = ({ listings: items, category }: Props) => {
   const renderRow: ListRenderItem<AirbnbListing> = ({ item }) => (
     <Link href={`/listing/${item.id}`} asChild>
       <TouchableOpacity>
-        <Animated.View 
-        entering={FadeInRight}
-        exiting={FadeOutLeft}
-        style={styles.listing}>
+        <Animated.View
+          entering={FadeInRight}
+          exiting={FadeOutLeft}
+          style={styles.listing}>
           <Image
             style={styles.image}
             source={
@@ -79,11 +89,14 @@ const Listings = ({ listings: items, category }: Props) => {
 
   return (
     <View style={defaultStyles.container}>
-      <FlatList
+      <BottomSheetFlatList
+        ListHeaderComponent={<Text style={styles.info}>
+          {items.length} homes
+        </Text>}
         renderItem={renderRow}
         data={loading ? [] : items}
         ref={listRef}
-      ></FlatList>
+      ></BottomSheetFlatList>
     </View>
   )
 }
@@ -100,6 +113,12 @@ const styles = StyleSheet.create(
       width: "100%",
       height: 300,
       borderRadius: 10
+    },
+    info: {
+      fontFamily: "mon-sb",
+      textAlign: "center",
+      fontSize: 16,
+      marginTop: 4
     }
   }
 )
