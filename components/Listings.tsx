@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, ListRenderItem, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { defaultStyles } from '@/constants/Styles';
 import { Link } from 'expo-router';
 import { AirbnbListing } from '@/assets/data/airbnblistingsinterface';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 import { FlatList } from 'react-native-gesture-handler';
-import { BottomSheetFlatList, BottomSheetFlatListMethods } from '@gorhom/bottom-sheet';
+import { BottomSheetFlatList, BottomSheetFlatListMethods, BottomSheetVirtualizedList, BottomSheetVirtualizedListMethods } from '@gorhom/bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet';
 
 interface Props {
   listings: any[],
@@ -17,7 +18,7 @@ interface Props {
 const Listings = ({ listings: items, category, refresh }: Props) => {
 
   const [loading, setloading] = useState(false)
-  const listRef = useRef<BottomSheetFlatListMethods>(null)
+  const listRef = useRef<BottomSheetVirtualizedListMethods>(null)
 
   useEffect(() => {
     console.log("REFRESH_LISTINGS_")
@@ -36,7 +37,7 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
     }, [category]
   )
 
-  const renderRow: ListRenderItem<AirbnbListing> = ({ item }) => (
+  const renderRow: ListRenderItem<AirbnbListing> = useCallback(({ item }) => (
     <Link href={`/listing/${item.id}`} asChild>
       <TouchableOpacity>
         <Animated.View
@@ -85,18 +86,27 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
         </Animated.View>
       </TouchableOpacity>
     </Link>
-  )
+  ), [])
 
   return (
     <View style={defaultStyles.container}>
-      <BottomSheetFlatList
+      <BottomSheetVirtualizedList
         ListHeaderComponent={<Text style={styles.info}>
           {items.length} homes
         </Text>}
         renderItem={renderRow}
         data={loading ? [] : items}
         ref={listRef}
-      ></BottomSheetFlatList>
+
+        getItemCount={(items) => items.length}
+        getItem={
+          (items, index) => items[index]
+        }
+        keyExtractor={(item, index) => item.id.toString()}
+        initialNumToRender={8}
+        onEndReached={() => { items }}
+        onEndReachedThreshold={0.5}
+      ></BottomSheetVirtualizedList>
     </View>
   )
 }
