@@ -11,11 +11,11 @@ interface Props {
 }
 
 const INITIAL_REGION = {
-    latitude: 52.53269,
-    longitude: 13.41805,
-    latitudeDelta: 0.1,
-    longitudeDelta: 0.1
-}
+    latitude: 52.520008,
+    longitude: 13.404954,
+    latitudeDelta: 1,
+    longitudeDelta: 1
+};
 
 const ListingsMap = memo(({ listings }: Props) => {
 
@@ -134,4 +134,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default ListingsMap
+export default memo(ListingsMap)
