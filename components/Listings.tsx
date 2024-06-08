@@ -5,9 +5,7 @@ import { Link } from 'expo-router';
 import { AirbnbListing } from '@/assets/data/airbnblistingsinterface';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
-import { FlatList } from 'react-native-gesture-handler';
 import { BottomSheetFlatList, BottomSheetFlatListMethods, BottomSheetVirtualizedList, BottomSheetVirtualizedListMethods } from '@gorhom/bottom-sheet';
-import BottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet';
 
 interface Props {
   listings: any[],
@@ -19,6 +17,12 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
 
   const [loading, setloading] = useState(false)
   const listRef = useRef<BottomSheetVirtualizedListMethods>(null)
+
+  const getItem = (items: any[], index: number) => (
+    items[index]
+  )
+
+  const getItemCount = (items: any[]) => (items.length)
 
   useEffect(() => {
     console.log("REFRESH_LISTINGS_")
@@ -94,18 +98,14 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
         ListHeaderComponent={<Text style={styles.info}>
           {items.length} homes
         </Text>}
+
         renderItem={renderRow}
         data={loading ? [] : items}
         ref={listRef}
 
-        getItemCount={(items) => items.length}
-        getItem={
-          (items, index) => items[index]
-        }
-        keyExtractor={(item, index) => item.id.toString()}
-        initialNumToRender={8}
-        onEndReached={() => { items }}
-        onEndReachedThreshold={0.5}
+        getItem={getItem}
+        getItemCount={getItemCount}
+        keyExtractor={(item) => item.id.toString()}
       ></BottomSheetVirtualizedList>
     </View>
   )
