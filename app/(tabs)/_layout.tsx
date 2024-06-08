@@ -3,17 +3,20 @@ import { Tabs } from 'expo-router'
 import Colors from '@/constants/Colors'
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
+import { unstable_settings } from '../_layout'
 
 const Layout = () => {
+    
     return (
-        <Tabs screenOptions={
-            {
-                tabBarActiveTintColor: Colors.primary,
-                tabBarLabelStyle: {
-                    fontFamily: "mon-sb"
-                },
-            }
-        }>
+        <Tabs
+            screenOptions={
+                {
+                    tabBarActiveTintColor: Colors.primary,
+                    tabBarLabelStyle: {
+                        fontFamily: "mon-sb"
+                    },
+                }
+            }>
 
             <Tabs.Screen name="index" options={
                 {
@@ -67,6 +70,7 @@ const Layout = () => {
 
             <Tabs.Screen name="profile" options={
                 {
+                    headerShown: false,
                     tabBarLabel: "Profile",
                     tabBarIcon: ({ color, size }) =>
                         <Ionicons name="person-circle-outline"

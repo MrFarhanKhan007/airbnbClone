@@ -6,7 +6,6 @@ import listingsData from "@/assets/data/csvjsonLatest.json"
 import ListingsMap from '@/components/ListingsMap'
 
 import ListingsBottomSheet from '@/components/ListingsBottomSheet'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 const Explore = () => {
   const [category, setcategory] = useState("Tiny Homes")
