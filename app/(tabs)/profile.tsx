@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, Image } from 'react-native'
+import { View, Text, Button, StyleSheet, Image, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-expo'
 import { Link } from 'expo-router'
@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import { defaultStyles } from '@/constants/Styles'
+import * as ImagePicker from "expo-image-picker"
 
 const profile = () => {
   const { signOut, isSignedIn } = useAuth()
@@ -28,11 +29,42 @@ const profile = () => {
   }, [user])
 
   const onSaveUser = async () => {
-    setEdit(false)
+    try {
+      if (!firstName || !lastName) {
+        return
+      }
+      await user?.update(
+        {
+          firstName,
+          lastName
+        }
+      )
+    } catch (e) {
+      console.log(e)
+      throw e
+    } finally {
+      setEdit(false)
+    }
   }
 
   const onCaptureImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync(
+      {
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 0.75,
+        base64: true
+      }
+    )
 
+    if (!result.canceled) {
+      const base64 = `data:image/png;base64,${result.assets[0].base64}`
+      user?.setProfileImage(
+        {
+          file: base64
+        }
+      )
+    }
   }
 
 
@@ -44,15 +76,17 @@ const profile = () => {
       </View>
 
       {!isSignedIn && (
-        <Link href={`/(modals)/login`}>
-          <Button
+        <View style={{ alignItems: "center", width: "100%" }}>
+          <Link href={`/(modals)/login`}>
+            <TouchableOpacity
+              onPress={() => { }}
+              style={styles.btn}
+            >
+              <Text style={defaultStyles.btnText}>Log in</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
 
-            title='Log in'
-            onPress={() => { }}
-            color={Colors.dark}
-
-          />
-        </Link>
 
       )}
 
@@ -74,10 +108,27 @@ const profile = () => {
             <View style={{ flexDirection: "row", gap: 6 }}>
               {
                 edit ? (
-                  <TouchableOpacity
-                    onPress={onSaveUser}>
-                    <Ionicons name="checkmark-outline" size={24}></Ionicons>
-                  </TouchableOpacity>
+                  <View style={styles.editRow}>
+
+                    <TextInput
+                      placeholder="First name"
+                      value={firstName || ""}
+                      onChangeText={setfirstName}
+                      style={[defaultStyles.inputField, { width: 100 }]}
+                    />
+                    <TextInput
+                      placeholder="Last name"
+                      value={lastName || ""}
+                      onChangeText={setlastName}
+                      style={[defaultStyles.inputField, { width: 100 }]}
+                    />
+
+                    <TouchableOpacity
+                      onPress={onSaveUser}>
+                      <Ionicons name="checkmark-outline" size={24}></Ionicons>
+                    </TouchableOpacity>
+
+                  </View>
                 ) : (
                   <View style={styles.editRow}>
                     <Text style={{ fontFamily: "mon-sb", fontSize: 22 }}>
@@ -105,8 +156,6 @@ const profile = () => {
           </TouchableOpacity>
         </View>
       )}
-
-
 
     </ SafeAreaView>
   )
@@ -148,6 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.grey,
   },
   editRow: {
+    height: 50,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',

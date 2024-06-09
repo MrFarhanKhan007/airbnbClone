@@ -1,4 +1,4 @@
-export interface AirbnbListing {
+interface AirbnbListing {
   id: number;
   listing_url: string;
   scrape_id: number;
@@ -75,3 +75,5 @@ export interface AirbnbListing {
   calculated_host_listings_count_shared_rooms: number;
   reviews_per_month: number;
 }
+
+export default AirbnbListing

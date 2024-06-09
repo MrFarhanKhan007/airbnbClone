@@ -49,7 +49,7 @@ const Login = () => {
 
       if (createdSessionId) {
         setActive!({ session: createdSessionId })
-        router.back()
+        router.navigate("/(tabs)")
       }
     } catch (error) {
       console.error("OAuth error: ", error)

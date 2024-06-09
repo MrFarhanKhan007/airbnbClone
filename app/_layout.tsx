@@ -47,7 +47,7 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
   const [loaded, error] = useFonts({
     "mon": require("../assets/fonts/Montserrat-Regular.ttf"),
     "mon-sb": require("../assets/fonts/Montserrat-SemiBold.ttf"),
@@ -94,7 +94,7 @@ function RootLayoutNav() {
         headerShown: false
       }} />
       <Stack.Screen name="(modals)/login" options={
-        {
+        { 
           title: "Log in or Sign up",
           headerTitleAlign: "center",
           headerTitleStyle: {
@@ -138,3 +138,5 @@ function RootLayoutNav() {
     </Stack >
   );
 }
+
+export default RootLayout

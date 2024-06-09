@@ -4,9 +4,9 @@ import { useLocalSearchParams, useNavigation } from 'expo-router'
 import listingsData from "@/assets/data/csvjsonLatest.json"
 import { defaultStyles } from '@/constants/Styles'
 import Animated, { SlideInDown, interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated'
-import { AirbnbListing } from '@/assets/data/airbnblistingsinterface'
 import { Ionicons } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
+import AirbnbListing from '@/assets/data/airbnblistingsinterface'
 
 const IMG_HEIGHT = 300;
 const { width } = Dimensions.get("window")

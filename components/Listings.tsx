@@ -2,10 +2,10 @@ import { View, Text, StyleSheet, ListRenderItem, TouchableOpacity, Image } from 
 import React, { useEffect, useState, useRef, useCallback, PureComponent, memo } from 'react'
 import { defaultStyles } from '@/constants/Styles';
 import { Link } from 'expo-router';
-import { AirbnbListing } from '@/assets/data/airbnblistingsinterface';
+import AirbnbListing from '@/assets/data/airbnblistingsinterface';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
-import { BottomSheetFlatList, BottomSheetFlatListMethods, BottomSheetVirtualizedList, BottomSheetVirtualizedListMethods } from '@gorhom/bottom-sheet';
+import { BottomSheetVirtualizedList, BottomSheetVirtualizedListMethods } from '@gorhom/bottom-sheet';
 
 interface Props {
   listings: any[],
