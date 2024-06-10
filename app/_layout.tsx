@@ -3,11 +3,14 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import 'react-native-reanimated';
 import * as SecureStore from "expo-secure-store";
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import ModalHeaderText from '@/components/ModalHeaderText';
+import Colors from '@/constants/Colors';
+import { BlurView } from 'expo-blur';
 
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
@@ -94,7 +97,7 @@ function RootLayoutNav() {
         headerShown: false
       }} />
       <Stack.Screen name="(modals)/login" options={
-        { 
+        {
           title: "Log in or Sign up",
           headerTitleAlign: "center",
           headerTitleStyle: {
@@ -123,11 +126,27 @@ function RootLayoutNav() {
       <Stack.Screen name="(modals)/booking" options={
         {
           presentation: "transparentModal",
+          headerTransparent: true,
+          headerBackVisible: false,
+          headerTitle: () => <ModalHeaderText />,
           animation: "fade",
           headerTitleAlign: "center",
+          // headerBackground: () => {
+          //   return (
+          //     <View style={{ backgroundColor: "#FFF", width: "100%" }}></View>
+          //   )
+          // },
           headerLeft: () =>
-            <TouchableOpacity onPress={() => router.back()}>
-              <Ionicons name='close-outline' size={28}>
+            <TouchableOpacity onPress={() => router.back()}
+              style={{
+                backgroundColor: "#FFF",
+                borderColor: Colors.grey,
+                borderWidth: 1,
+                borderRadius: 20,
+                padding: 5
+              }}
+            >
+              <Ionicons name='close-outline' size={22}>
               </Ionicons>
             </TouchableOpacity>
         }
