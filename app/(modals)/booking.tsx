@@ -24,6 +24,7 @@ const Booking = () => {
         style={defaultStyles.footer}
         entering={SlideInDown.delay(200)}
       >
+        {/* Foooter */}
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
 
           <TouchableOpacity onPress={onClearAll}>
@@ -45,7 +46,6 @@ const Booking = () => {
     </BlurView >
   )
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
