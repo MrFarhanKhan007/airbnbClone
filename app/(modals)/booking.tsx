@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BlurView } from 'expo-blur'
 import Colors from '@/constants/Colors'
 import Animated, { SlideInDown } from 'react-native-reanimated'
@@ -7,6 +7,8 @@ import { defaultStyles } from '@/constants/Styles'
 import { useRouter } from 'expo-router'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import { Ionicons } from '@expo/vector-icons'
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
 const Booking = () => {
   const router = useRouter()
@@ -18,12 +20,61 @@ const Booking = () => {
     setopenCard(0)
   }
 
+  useEffect(() => {
+    console.log(openCard)
+  }, [openCard])
+  
+
   return (
     <BlurView style={styles.container}
       experimentalBlurMethod="dimezisBlurView"
       tint="extraLight"
       intensity={70}>
 
+      {/* Where */}
+      <View
+        style={styles.card}>
+        {openCard != 0 && (
+          <AnimatedTouchableOpacity
+            onPress={() => setopenCard(0)}
+            style={styles.cardPreview}
+          >
+            <Text style={styles.previewText}>Where</Text>
+            <Text style={styles.previewdDate}>I'm flexible</Text>
+
+          </AnimatedTouchableOpacity>
+        )}
+      </View>
+
+      {/* When */}
+      <View
+        style={styles.card}>
+        {openCard != 1 && (
+          <AnimatedTouchableOpacity
+            onPress={() => setopenCard(1)}
+            style={styles.cardPreview}
+          >
+            <Text style={styles.previewText}>When</Text>
+            <Text style={styles.previewdDate}>Any week</Text>
+
+          </AnimatedTouchableOpacity>
+        )}
+      </View>
+
+      {/* Who */}
+      <View
+        style={styles.card}>
+        {openCard != 2 && (
+          <AnimatedTouchableOpacity
+            onPress={() => setopenCard(2)}
+            style={styles.cardPreview}
+          >
+            <Text style={styles.previewText}>Who</Text>
+            <Text style={styles.previewdDate}>Add guests</Text>
+
+          </AnimatedTouchableOpacity>
+        )}
+      </View>
 
       {/* Foooter */}
       <Animated.View
@@ -138,7 +189,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.grey,
   },
-  previewdData: {
+  previewdDate: {
     fontFamily: 'mon-sb',
     fontSize: 14,
     color: Colors.dark,
