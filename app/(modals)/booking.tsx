@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { BlurView } from 'expo-blur'
 import Colors from '@/constants/Colors'
 import Animated, { SlideInDown } from 'react-native-reanimated'
@@ -10,21 +10,26 @@ import { Ionicons } from '@expo/vector-icons'
 
 const Booking = () => {
   const router = useRouter()
+  const [openCard, setopenCard] = useState(0)
+  const [selectedPlace, setselectedPlace] = useState(0)
+
   const onClearAll = () => {
-
+    setselectedPlace(0)
+    setopenCard(0)
   }
-
 
   return (
     <BlurView style={styles.container}
       experimentalBlurMethod="dimezisBlurView"
       tint="extraLight"
       intensity={70}>
+
+
+      {/* Foooter */}
       <Animated.View
         style={defaultStyles.footer}
         entering={SlideInDown.delay(200)}
       >
-        {/* Foooter */}
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
 
           <TouchableOpacity onPress={onClearAll}>
