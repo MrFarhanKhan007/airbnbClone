@@ -1,12 +1,14 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { BlurView } from 'expo-blur'
 import Colors from '@/constants/Colors'
-import Animated, { SlideInDown } from 'react-native-reanimated'
+import Animated, { FadeIn, FadeOut, SlideInDown } from 'react-native-reanimated'
 import { defaultStyles } from '@/constants/Styles'
 import { useRouter } from 'expo-router'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import { Ionicons } from '@expo/vector-icons'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
+import { places } from '@/assets/data/places'
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
@@ -23,19 +25,23 @@ const Booking = () => {
   useEffect(() => {
     console.log(openCard)
   }, [openCard])
-  
+
 
   return (
-    <BlurView style={styles.container}
+    <BlurView
+      intensity={70}
+      style={styles.container}
+      tint='light'
       experimentalBlurMethod="dimezisBlurView"
-      tint="extraLight"
-      intensity={70}>
+    >
 
       {/* Where */}
       <View
         style={styles.card}>
         {openCard != 0 && (
           <AnimatedTouchableOpacity
+            entering={FadeIn.duration(200)}
+            exiting={FadeOut.duration(200)}
             onPress={() => setopenCard(0)}
             style={styles.cardPreview}
           >
@@ -44,6 +50,48 @@ const Booking = () => {
 
           </AnimatedTouchableOpacity>
         )}
+
+        {openCard === 0 && (
+          <>
+            <Animated.Text entering={FadeIn} style={styles.cardHeader}> Where To</Animated.Text>
+            <Animated.View style={styles.cardBody}>
+              <View style={styles.searchSection}>
+                <Ionicons style={styles.searchIcon} name="search" size={20}></Ionicons>
+                <TextInput
+                  style={styles.inputField}
+                  placeholder='Search destination'
+                  placeholderTextColor={Colors.grey}>
+                </TextInput>
+              </View>
+
+            </Animated.View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 25, paddingLeft: 20, marginBottom: 30 }}
+            >
+              {
+                places.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => setselectedPlace(index)}>
+                    <Image source={item.img}
+                      style={selectedPlace == index ? styles.placeSelected : styles.place}
+                    />
+                    <Text style=
+                      {
+                        [{ paddingTop: 6 }, selectedPlace === index ? { fontFamily: "mon-sb" } : { fontFamily: 'mon' }]
+                      }
+                    >
+                      {item.title}
+                    </Text>
+                  </TouchableOpacity>
+                ))
+              }
+            </ScrollView>
+          </>
+        )}
+
       </View>
 
       {/* When */}
@@ -51,6 +99,8 @@ const Booking = () => {
         style={styles.card}>
         {openCard != 1 && (
           <AnimatedTouchableOpacity
+            entering={FadeIn.duration(200)}
+            exiting={FadeOut.duration(200)}
             onPress={() => setopenCard(1)}
             style={styles.cardPreview}
           >
@@ -59,6 +109,13 @@ const Booking = () => {
 
           </AnimatedTouchableOpacity>
         )}
+
+        {openCard === 1 && (
+          <Animated.View>
+            <Animated.Text entering={FadeIn} style={styles.cardHeader}> When's your trip?</Animated.Text>
+          </Animated.View>
+        )}
+
       </View>
 
       {/* Who */}
@@ -66,6 +123,8 @@ const Booking = () => {
         style={styles.card}>
         {openCard != 2 && (
           <AnimatedTouchableOpacity
+            entering={FadeIn.duration(200)}
+            exiting={FadeOut.duration(200)}
             onPress={() => setopenCard(2)}
             style={styles.cardPreview}
           >
@@ -73,6 +132,12 @@ const Booking = () => {
             <Text style={styles.previewdDate}>Add guests</Text>
 
           </AnimatedTouchableOpacity>
+        )}
+
+        {openCard === 2 && (
+          <Animated.View>
+            <Animated.Text entering={FadeIn} style={styles.cardHeader}> Who's coming?</Animated.Text>
+          </Animated.View>
         )}
       </View>
 
@@ -141,7 +206,6 @@ const styles = StyleSheet.create({
   },
   cardBody: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
   },
   cardPreview: {
     flexDirection: 'row',
@@ -158,7 +222,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ABABAB',
     borderRadius: 8,
-    marginBottom: 16,
+    marginBottom: 4,
   },
   searchIcon: {
     padding: 10,
@@ -173,16 +237,16 @@ const styles = StyleSheet.create({
     gap: 25,
   },
   place: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     borderRadius: 10,
   },
   placeSelected: {
     borderColor: Colors.grey,
     borderWidth: 2,
     borderRadius: 10,
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
   },
   previewText: {
     fontFamily: 'mon-sb',
