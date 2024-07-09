@@ -10,12 +10,41 @@ import { Ionicons } from '@expo/vector-icons'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { places } from '@/assets/data/places'
 
+// @ts-ignore
+import DatePicker from "react-native-modern-datepicker"
+
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
+
+const guestsGroups = [
+  {
+    name: 'Adults',
+    text: 'Ages 13 or above',
+    count: 0,
+  },
+  {
+    name: 'Children',
+    text: 'Ages 2-12',
+    count: 0,
+  },
+  {
+    name: 'Infants',
+    text: 'Under 2',
+    count: 0,
+  },
+  {
+    name: 'Pets',
+    text: 'Pets allowed',
+    count: 0,
+  },
+];
+
 
 const Booking = () => {
   const router = useRouter()
-  const [openCard, setopenCard] = useState(0)
+  const [openCard, setopenCard] = useState(0 )
   const [selectedPlace, setselectedPlace] = useState(0)
+  const today = new Date().toISOString().substring(0, 10)
+  const [groups, setgroups] = useState(guestsGroups)
 
   const onClearAll = () => {
     setselectedPlace(0)
@@ -80,7 +109,7 @@ const Booking = () => {
                     />
                     <Text style=
                       {
-                        [{ paddingTop: 6 }, selectedPlace === index ? { fontFamily: "mon-sb" } : { fontFamily: 'mon' }]
+                        [{ paddingTop: 6, fontFamily: 'mon' }, selectedPlace === index ? { fontFamily: "mon-sb" } : null]
                       }
                     >
                       {item.title}
@@ -111,9 +140,25 @@ const Booking = () => {
         )}
 
         {openCard === 1 && (
-          <Animated.View>
+          <>
             <Animated.Text entering={FadeIn} style={styles.cardHeader}> When's your trip?</Animated.Text>
-          </Animated.View>
+            <Animated.View style={styles.cardBody}>
+              <DatePicker
+                current={today}
+                selected={today}
+                mode={'Calendar'}
+                options={
+                  {
+                    defaultFont: "mon",
+                    headerFont: "mon-sb",
+                    borderColor: "transparent",
+                    mainColor: Colors.primary
+
+                  }
+                }
+              ></DatePicker>
+            </Animated.View>
+          </>
         )}
 
       </View>
@@ -135,9 +180,81 @@ const Booking = () => {
         )}
 
         {openCard === 2 && (
-          <Animated.View>
+          <>
             <Animated.Text entering={FadeIn} style={styles.cardHeader}> Who's coming?</Animated.Text>
-          </Animated.View>
+            <Animated.View style={styles.cardBody}>
+              {groups.map((item, index) => (
+                <View
+                  key={index} style={[styles.guestItem, index + 1 < guestsGroups.length ? styles.itemBorder : null]}>
+                  <View>
+                    <Text
+                      style={
+                        {
+                          fontFamily: "mon-sb",
+                          fontSize: 14
+                        }
+                      }
+                    >{item.name}</Text>
+                    <Text
+                      style={
+                        {
+                          fontFamily: "mon",
+                          fontSize: 14,
+                          color: Colors.grey
+                        }
+                      }
+                    >{item.text}</Text>
+                  </View>
+
+                  <View style={{
+                    flexDirection: "row", gap: 10,
+                    justifyContent: "center", alignItems: "center"
+                  }}>
+
+                    <TouchableOpacity
+                      onPress={() => {
+
+                        const newGroups = [...groups]
+                        if (newGroups[index].count > 0) {
+                          newGroups[index].count--;
+                          setgroups(newGroups)
+                        }
+                      }
+                      }
+                    >
+                      <Ionicons name="remove-circle-outline" size={26}
+                        color={groups[index].count > 0 ? Colors.grey : "#cdcdcd"}></Ionicons>
+                    </TouchableOpacity>
+                    <Text
+                      style={
+                        {
+                          fontFamily: "mon",
+                          fontSize: 16,
+                          minWidth: 18,
+                          textAlign: "center"
+                        }
+                      }
+                    >{item.count}</Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        const newGroups = [...groups]
+                        newGroups[index].count++;
+                        setgroups(newGroups)
+                      }}
+                    >
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={26}
+                        color={Colors.grey}
+                      ></Ionicons>
+                    </TouchableOpacity>
+
+                  </View>
+
+                </View>
+              ))}
+            </Animated.View>
+          </>
         )}
       </View>
 
