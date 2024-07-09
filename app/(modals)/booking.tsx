@@ -49,6 +49,7 @@ const Booking = () => {
   const onClearAll = () => {
     setselectedPlace(0)
     setopenCard(0)
+    setgroups(guestsGroups )
   }
 
   useEffect(() => {
