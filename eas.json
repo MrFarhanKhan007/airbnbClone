@@ -10,9 +10,13 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
-  },
-  "submit": {
-    "production": {}
+    "production": {
+      "env": {
+        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bW92ZWQtYmVldGxlLTI5LmNsZXJrLmFjY291bnRzLmRldiQ"
+      }
+    },
+    "submit": {
+      "production": {}
+    }
   }
 }

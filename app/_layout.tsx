@@ -13,7 +13,7 @@ import Colors from '@/constants/Colors';
 import { BlurView } from 'expo-blur';
 
 
-const NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_test_bW92ZWQtYmVldGxlLTI5LmNsZXJrLmFjY291bnRzLmRldiQ"
+const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 //custom token Cache
 
@@ -72,9 +72,10 @@ function RootLayout() {
     return null;
   }
 
+  console.log(EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY)
   return (
-    <ClerkProvider publishableKey={NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
-      <GestureHandlerRootView style={{flex:1}}>
+    <ClerkProvider publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <RootLayoutNav />
       </GestureHandlerRootView>
     </ClerkProvider>
